@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Timer</title>
+
+<style>
+body {
+    margin: 0;
+    height: 100vh;
+    font-family: "Times New Roman", serif;
+    background: url("alvo.png") no-repeat center center;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* CARD CIRCULAR */
+.card {
+    width: 380px;
+    height: 380px;
+    background: rgba(15,15,15,0.85);
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0 50px rgba(0,0,0,0.7);
+}
+
+.timer {
+    font-size: 64px;
+    color: #e2c88f;
+    margin-bottom: 20px;
+}
+
+.inputs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.inputs input {
+    width: 60px;
+    text-align: center;
+    font-size: 16px;
+    border-radius: 10px;
+    border: none;
+    padding: 6px;
+}
+
+button {
+    font-size: 18px;
+    padding: 10px 26px;
+    border-radius: 25px;
+    border: none;
+    cursor: pointer;
+    background: #e2c88f;
+    color: #111;
+    transition: 0.3s;
+    margin-top: 10px;
+}
+
+button:hover {
+    background: #f0dcae;
+}
+
+.voltar {
+    margin-top: 12px;
+    background: transparent;
+    color: #e2c88f;
+    border: 1px solid #e2c88f;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+    <div class="inputs">
+        <input type="number" id="h" placeholder="hh">
+        <input type="number" id="m" placeholder="mm">
+        <input type="number" id="s" placeholder="ss">
+    </div>
+
+    <div class="timer" id="timer">00:50:00</div>
+
+    <button id="botao" onclick="controle()">Iniciar</button>
+
+    <a href="index.html">
+        <button class="voltar">Voltar</button>
+    </a>
+
+</div>
+
+<script>
+let tempo = 50 * 60;
+let intervalo = null;
+let estado = "parado";
+
+function formatar(seg) {
+    const h = String(Math.floor(seg / 3600)).padStart(2,"0");
+    const m = String(Math.floor((seg % 3600)/60)).padStart(2,"0");
+    const s = String(seg % 60).padStart(2,"0");
+    return `${h}:${m}:${s}`;
+}
+
+function atualizar() {
+    document.getElementById("timer").innerText = formatar(tempo);
+}
+
+function controle() {
+    const btn = document.getElementById("botao");
+
+    if (estado === "parado") {
+        const h = Number(document.getElementById("h").value || 0);
+        const m = Number(document.getElementById("m").value || 50);
+        const s = Number(document.getElementById("s").value || 0);
+        tempo = h*3600 + m*60 + s;
+
+        iniciar();
+        estado = "rodando";
+        btn.innerText = "Pausar";
+
+    } else if (estado === "rodando") {
+        clearInterval(intervalo);
+        estado = "pausado";
+        btn.innerText = "Despausar";
+
+    } else {
+        iniciar();
+        estado = "rodando";
+        btn.innerText = "Pausar";
+    }
+}
+
+function iniciar() {
+    atualizar();
+    intervalo = setInterval(() => {
+        if (tempo <= 0) {
+            clearInterval(intervalo);
+            estado = "parado";
+            document.getElementById("botao").innerText = "Iniciar";
+            return;
+        }
+        tempo--;
+        atualizar();
+    }, 1000);
+}
+
+atualizar();
+</script>
+
+</body>
+</html>
