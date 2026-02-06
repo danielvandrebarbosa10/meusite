@@ -5,230 +5,60 @@
 <title>Timer de Estudos</title>
 
 <style>
-* {
-    box-sizing: border-box;
-}
-
 body {
     margin: 0;
     height: 100vh;
     font-family: "Times New Roman", serif;
     background: url("alvo.png") no-repeat center center;
     background-size: cover;
-    overflow: hidden;
-}
-
-/* ----------------------------
-   TELAS
------------------------------*/
-.tela {
-    position: absolute;
-    inset: 0;
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: opacity 0.5s ease, transform 0.5s ease;
 }
 
-.oculta {
-    opacity: 0;
-    pointer-events: none;
-    transform: scale(0.95);
-}
-
-/* ----------------------------
-   INDEX
------------------------------*/
-#index {
-    background: rgba(0,0,0,0.55);
-}
-
-#index .conteudo {
+.card {
+    background: rgba(0,0,0,0.65);
+    padding: 60px;
+    border-radius: 30px;
     text-align: center;
     color: #e2c88f;
+    box-shadow: 0 0 40px rgba(0,0,0,0.6);
 }
 
-#index h1 {
+h1 {
     font-size: 48px;
     margin-bottom: 30px;
 }
 
-/* ----------------------------
-   TIMER
------------------------------*/
-#timerTela {
-    background: rgba(0,0,0,0.25);
+a {
+    text-decoration: none;
 }
 
-/* CARD CIRCULAR */
-#card {
-    width: 360px;
-    height: 360px;
-    background: rgba(15, 15, 15, 0.85);
-    border-radius: 50%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0 0 40px rgba(0,0,0,0.6);
-}
-
-#timer {
-    font-size: 64px;
-    color: #e2c88f;
-    margin-bottom: 20px;
-}
-
-.inputs {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 15px;
-}
-
-.inputs input {
-    width: 60px;
-    text-align: center;
-    font-size: 16px;
-    border-radius: 10px;
-    border: none;
-    padding: 5px;
-}
-
-/* ----------------------------
-   BOTÕES
------------------------------*/
 button {
-    font-size: 18px;
-    padding: 10px 26px;
+    font-size: 20px;
+    padding: 14px 40px;
+    border-radius: 30px;
     border: none;
-    border-radius: 25px;
     cursor: pointer;
     background: #e2c88f;
     color: #111;
     transition: 0.3s;
-    margin-top: 10px;
 }
 
 button:hover {
     background: #f0dcae;
-}
-
-.voltar {
-    margin-top: 15px;
-    background: transparent;
-    color: #e2c88f;
-    border: 1px solid #e2c88f;
 }
 </style>
 </head>
 
 <body>
 
-<!-- ==========================
-     TELA INDEX
-========================== -->
-<div id="index" class="tela">
-    <div class="conteudo">
-        <h1>Timer de Estudos</h1>
-        <button onclick="irParaTimer()">Entrar</button>
-    </div>
+<div class="card">
+    <h1>Timer de Estudos</h1>
+    <a href="timer.html">
+        <button>Entrar</button>
+    </a>
 </div>
-
-<!-- ==========================
-     TELA TIMER
-========================== -->
-<div id="timerTela" class="tela oculta">
-
-    <div id="card">
-
-        <div class="inputs">
-            <input type="number" id="horas" placeholder="hh" min="0">
-            <input type="number" id="minutos" placeholder="mm" min="0" max="59">
-            <input type="number" id="segundos" placeholder="ss" min="0" max="59">
-        </div>
-
-        <div id="timer">00:50:00</div>
-
-        <button id="botao" onclick="controleTimer()">Iniciar</button>
-        <button class="voltar" onclick="voltarIndex()">Voltar</button>
-    </div>
-
-</div>
-
-<script>
-/* ----------------------------
-   NAVEGAÇÃO
------------------------------*/
-function irParaTimer() {
-    document.getElementById("index").classList.add("oculta");
-    document.getElementById("timerTela").classList.remove("oculta");
-}
-
-function voltarIndex() {
-    document.getElementById("timerTela").classList.add("oculta");
-    document.getElementById("index").classList.remove("oculta");
-}
-
-/* ----------------------------
-   TIMER
------------------------------*/
-let tempoRestante = 50 * 60;
-let intervalo = null;
-let estado = "parado";
-
-function formatarTempo(segundos) {
-    const h = String(Math.floor(segundos / 3600)).padStart(2, "0");
-    const m = String(Math.floor((segundos % 3600) / 60)).padStart(2, "0");
-    const s = String(segundos % 60).padStart(2, "0");
-    return `${h}:${m}:${s}`;
-}
-
-function atualizarTimer() {
-    document.getElementById("timer").innerText = formatarTempo(tempoRestante);
-}
-
-function controleTimer() {
-    const botao = document.getElementById("botao");
-
-    if (estado === "parado") {
-        const h = Number(document.getElementById("horas").value || 0);
-        const m = Number(document.getElementById("minutos").value || 50);
-        const s = Number(document.getElementById("segundos").value || 0);
-
-        tempoRestante = h * 3600 + m * 60 + s;
-        atualizarTimer();
-        iniciarContagem();
-
-        estado = "rodando";
-        botao.innerText = "Pausar";
-
-    } else if (estado === "rodando") {
-        clearInterval(intervalo);
-        estado = "pausado";
-        botao.innerText = "Despausar";
-
-    } else {
-        iniciarContagem();
-        estado = "rodando";
-        botao.innerText = "Pausar";
-    }
-}
-
-function iniciarContagem() {
-    intervalo = setInterval(() => {
-        if (tempoRestante <= 0) {
-            clearInterval(intervalo);
-            estado = "parado";
-            document.getElementById("botao").innerText = "Iniciar";
-            return;
-        }
-        tempoRestante--;
-        atualizarTimer();
-    }, 1000);
-}
-
-atualizarTimer();
-</script>
 
 </body>
 </html>
