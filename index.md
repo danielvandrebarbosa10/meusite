@@ -6,23 +6,20 @@
 </head>
 <body>
 
-    <h1>Bem-vindo ao meu site</h1>
+    <h1>Página Inicial</h1>
 
     <nav>
-        <a href="index.html">Início</a> |
-        <a href="sobre.html">Sobre</a> |
-        <a href="contato.html">Contato</a>
+        <a href="./index.html">Início</a> |
+        <a href="./sobre.html">Sobre</a> |
+        <a href="./contato.html">Contato</a>
     </nav>
 
     <hr>
 
     <p>
-        Este é um site simples em HTML com várias páginas.
-    </p>
-
-    <p>
-        <a href="sobre.html">Clique aqui para saber mais</a>
+        Bem-vindo ao meu site publicado no GitHub Pages.
     </p>
 
 </body>
 </html>
+
